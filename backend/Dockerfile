@@ -1,17 +1,20 @@
-# استخدم نسخة Python خفيفة وسريعة
-FROM python:3.11.0
+# استخدم نسخة خفيفة من Python
+FROM python:3.11-slim
 
 # تحديد مجلد العمل داخل الحاوية
 WORKDIR /app
 
-# نسخ ملفات المشروع كلها داخل الحاوية
+# نسخ كل ملفات المشروع
 COPY . /app
 
 # تثبيت المتطلبات
 RUN pip install --no-cache-dir -r backend/requirements.txt
 
-# فتح المنفذ الذي سيعمل عليه Flask
-EXPOSE 5000
+# قراءة المنفذ من متغير البيئة (Deployra يمرره تلقائيًا)
+ENV PORT=8080
 
-# الأمر الذي يشغل التطبيق
-CMD ["gunicorn", "backend.app:app", "--bind", "0.0.0.0:5000"]
+# فتح المنفذ (اختياري للتوثيق فقط)
+EXPOSE 8080
+
+# تشغيل التطبيق عبر gunicorn وربطه بالمنفذ الصحيح
+CMD ["sh", "-c", "gunicorn backend.app:app --bind 0.0.0.0:${PORT}"]
