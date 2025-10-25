@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 تفعيل الحساب - Xtractor Pro</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-icon">🌊</div>
+                <h1>Xtractor Pro</h1>
+                <p>نظام متكامل لإدارة ومعالجة ملفات Excel</p>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>تفعيل الحساب</h2>
+                <p class="subtitle">أدخل كود التفعيل الذي حصلت عليه من المطور</p>
+                
+                <form id="activateForm">
+                    <div class="form-group">
+                        <label for="activationCode">🔑 كود التفعيل</label>
+                        <input 
+                            type="text" 
+                            id="activationCode" 
+                            name="activationCode" 
+                            required 
+                            placeholder="XXXX-XXXX-XXXX"
+                            maxlength="14"
+                            autocomplete="off"
+                        >
+                        <small>أدخل الكود المكون من 12 رقم وحرف</small>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="activateBtn">
+                        <span>✅ تفعيل الحساب</span>
+                        <div class="spinner" style="display: none;"></div>
+                    </button>
+
+                    <div class="divider">
+                        <span>أو</span>
+                    </div>
+
+                    <div class="register-link">
+                        <p>لديك حساب مفعل؟ <a href="/login">سجل الدخول</a></p>
+                        <p>ليس لديك حساب؟ <a href="/register">سجل الآن</a></p>
+                    </div>
+                </form>
+
+                <!-- Alert Messages -->
+                <div id="alertMessage" class="alert" style="display: none;"></div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <h3>💡 نصائح هامة</h3>
+                <ul>
+                    <li>احصل على كود التفعيل من المطور مباشرة</li>
+                    <li>الكود صالح لمرة واحدة فقط</li>
+                    <li>تأكد من إدخال الكود بشكل صحيح</li>
+                    <li>للحصول على كود جديد، تواصل مع المطور</li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p>Developed by Eng. Ahmed Waked</p>
+                <p>📧 eng.ahmed.a.waked@gmail.com</p>
+                <p>v3.0 Ocean Edition</p>
+            </div>
+        </div>
+
+        <!-- Background Animation -->
+        <div class="ocean-animation">
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-format activation code input
+        const activationCodeInput = document.getElementById('activationCode');
+        activationCodeInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+            if (value.length > 12) value = value.substring(0, 12);
+            
+            // Format as XXXX-XXXX-XXXX
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) formatted += '-';
+                formatted += value[i];
+            }
+            
+            e.target.value = formatted;
+        });
+
+        // Activate form submission
+        document.getElementById('activateForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const activationCode = document.getElementById('activationCode').value.trim();
+            const activateBtn = document.getElementById('activateBtn');
+            const spinner = activateBtn.querySelector('.spinner');
+
+            if (!activationCode) {
+                showAlert('error', '❌ كود التفعيل مطلوب');
+                return;
+            }
+
+            // Validate code format
+            const codeWithoutDashes = activationCode.replace(/-/g, '');
+            if (codeWithoutDashes.length !== 12) {
+                showAlert('error', '❌ كود التفعيل يجب أن يكون 12 رقم وحرف');
+                return;
+            }
+
+            // Show loading
+            activateBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+
+            try {
+                // Get user ID from localStorage (saved during registration)
+                const pendingUserId = localStorage.getItem('pending_user_id');
+                
+                if (!pendingUserId) {
+                    showAlert('error', '❌ يرجى التسجيل أولاً قبل التفعيل');
+                    setTimeout(() => {
+                        window.location.href = '/register';
+                    }, 2000);
+                    return;
+                }
+
+                const response = await fetch('/api/auth/activate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: pendingUserId,
+                        activation_code: activationCode
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('success', '✅ ' + result.message + ' جاري التحويل...');
+                    
+                    // Clear pending user
+                    localStorage.removeItem('pending_user_id');
+                    
+                    // Redirect to login page
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    showAlert('error', '❌ ' + (result.error || 'فشل التفعيل'));
+                }
+            } catch (error) {
+                console.error('Activation error:', error);
+                showAlert('error', '❌ حدث خطأ. يرجى المحاولة مرة أخرى');
+            } finally {
+                activateBtn.disabled = false;
+                spinner.style.display = 'none';
+            }
+        });
+
+        function showAlert(type, message) {
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.textContent = message;
+            alertMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                alertMessage.style.display = 'none';
+            }, 6000);
+        }
+    </script>
+</body>
+</html>

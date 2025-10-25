@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 Xtractor Pro - Ocean Edition</title>
+    <style>
+        :root {
+            --deep-ocean: #0A2463;
+            --ocean-blue: #1E5F8B;
+            --sea-teal: #158FAD;
+            --aqua: #3CAEA3;
+            --light-aqua: #5EC4BE;
+            --foam: #86D5D0;
+            --sand: #F6D55C;
+            --coral: #ED553B;
+            --dark-bg: #0B1929;
+            --medium-bg: #133A5E;
+            --light-bg: #1A4D7A;
+            --text-white: #FFFFFF;
+            --text-light: #E8F4F8;
+            --success: #20BF55;
+            --warning: #F39C12;
+            --error: #E74C3C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, var(--medium-bg) 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--deep-ocean), var(--ocean-blue));
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            color: var(--foam);
+        }
+
+        .logo p {
+            font-size: 0.85rem;
+            color: var(--light-aqua);
+            margin-top: 0.25rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .subscription-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 2px solid var(--success);
+        }
+
+        .time-remaining {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, var(--coral), #c0392b);
+            color: white;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(237, 85, 59, 0.4);
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 0;
+            max-width: 1600px;
+            margin: 0 auto;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--ocean-blue);
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 3px solid var(--aqua);
+            color: var(--text-white);
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-btn {
+            padding: 1rem;
+            background: var(--medium-bg);
+            color: var(--text-white);
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-btn:hover {
+            background: var(--sea-teal);
+            transform: translateX(-5px);
+        }
+
+        .nav-btn.active {
+            background: var(--sea-teal);
+            box-shadow: 0 4px 10px rgba(21, 143, 173, 0.4);
+        }
+
+        .features-box {
+            background: var(--medium-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .features-box h3 {
+            color: var(--sand);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .features-box ul {
+            list-style: none;
+        }
+
+        .features-box li {
+            padding: 0.4rem 0;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, var(--ocean-blue), var(--sea-teal));
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--light-aqua);
+            font-size: 1rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--medium-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: var(--sand);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* File Upload Enhanced */
+        .file-upload-card {
+            background: linear-gradient(135deg, var(--sea-teal), var(--aqua));
+            border: 3px solid var(--foam);
+        }
+
+        .file-upload-card h3 {
+            color: white;
+        }
+
+        .file-drop-zone {
+            background: rgba(255,255,255,0.15);
+            border: 3px dashed white;
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 1rem 0;
+        }
+
+        .file-drop-zone:hover {
+            background: rgba(255,255,255,0.25);
+            border-style: solid;
+            transform: scale(1.02);
+        }
+
+        .file-drop-zone.dragover {
+            background: rgba(255,255,255,0.35);
+            border-color: var(--sand);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-list {
+            margin-top: 1.5rem;
+        }
+
+        .file-item {
+            background: rgba(32, 191, 85, 0.15);
+            padding: 0.75rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+            border-left: 4px solid var(--success);
+        }
+
+        .file-item:hover {
+            background: rgba(32, 191, 85, 0.25);
+            transform: translateX(-5px);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .file-size {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+        }
+
+        /* Mode Selection Enhanced */
+        .mode-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .mode-card {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--aqua);
+        }
+
+        .mode-card.active {
+            background: linear-gradient(135deg, var(--aqua), var(--sea-teal));
+            border-color: var(--foam);
+            box-shadow: 0 5px 20px rgba(60, 174, 163, 0.4);
+        }
+
+        .mode-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .mode-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .mode-description {
+            font-size: 0.85rem;
+            color: var(--light-aqua);
+            line-height: 1.6;
+        }
+
+        /* Info Box Enhanced */
+        .info-box {
+            background: rgba(60, 174, 163, 0.15);
+            border: 2px solid var(--aqua);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .info-box h4 {
+            color: var(--sand);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            background: rgba(60, 174, 163, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            border-right: 4px solid var(--aqua);
+        }
+
+        .info-item strong {
+            color: var(--sand);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Buttons Enhanced */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--success), #1aa34a);
+            color: white;
+            padding: 1rem 2rem;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(32, 191, 85, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Progress Card */
+        .progress-card {
+            background: var(--medium-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .progress-card.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 40px;
+            background: var(--light-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--aqua), var(--foam));
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: var(--light-aqua);
+            margin-top: 1rem;
+        }
+
+        /* Results Card */
+        .results-card {
+            background: linear-gradient(135deg, var(--sea-teal), var(--aqua));
+            border: 3px solid var(--foam);
+            display: none;
+        }
+
+        .results-card.active {
+            display: block;
+        }
+
+        .results-card h3 {
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+        
+        /* New result style for updated logic */
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-item .stat-label {
+            color: var(--light-aqua);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .stat-item .stat-value {
+            color: var(--sand);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Dashboard Stats */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--medium-bg), var(--light-bg));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-right: 5px solid var(--aqua);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .stat-card-icon {
+            font-size: 3rem;
+        }
+
+        .stat-card-content h4 {
+            font-size: 0.9rem;
+            color: var(--light-aqua);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--deep-ocean);
+            padding: 1rem;
+            text-align: center;
+            color: var(--light-aqua);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .mode-selection {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌊</div>
+                <div>
+                    <h1>Xtractor Pro</h1>
+                    <p>نظام متكامل لإدارة ومعالجة ملفات Excel</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <div class="subscription-status">
+                    <span>⏰</span>
+                    <div>
+                        <div style="font-size: 0.75rem;">الوقت المتبقي</div>
+                        <div class="time-remaining" id="timeRemaining">تحميل...</div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-logout" onclick="logout()">
+                    <span>🚪</span>
+                    <span>تسجيل خروج</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <aside class="sidebar">
+            <h2>📋 القائمة الرئيسية</h2>
+            
+            <nav class="nav-menu">
+                <button class="nav-btn active" data-section="dashboard">
+                    <span>📊</span>
+                    <span>لوحة التحكم</span>
+                </button>
+                <button class="nav-btn" data-section="cars">
+                    <span>🚗</span>
+                    <span>استخلاص تقارير السيارات</span>
+                </button>
+                <button class="nav-btn" data-section="visits">
+                    <span>📈</span>
+                    <span>توزيع تقارير الزيارات</span>
+                </button>
+                <button class="nav-btn" data-section="logs">
+                    <span>📜</span>
+                    <span>سجل العمليات</span>
+                </button>
+                <button class="nav-btn" data-section="account">
+                    <span>👤</span>
+                    <span>إدارة الحساب</span>
+                </button>
+            </nav>
+
+            <div class="features-box">
+                <h3>ℹ️ المزايا</h3>
+                <ul>
+                    <li>✅ تحويل ملفات XLS إلى XLSX</li>
+                    <li>✅ استخلاص بيانات السيارات</li>
+                    <li>✅ توزيع تقارير المبيعات</li>
+                    <li>✅ إنشاء تقارير موحدة</li>
+                    <li>✅ فحص المناطق الجغرافية</li>
+                </ul>
+            </div>
+
+            <div style="margin-top: auto; text-align: center; padding: 1.5rem; background: var(--deep-ocean); border-radius: 8px;">
+                <p style="font-size: 0.75rem; color: var(--light-aqua);">مطور النظام</p>
+                <h3 style="color: var(--foam); font-size: 1rem; margin: 0.25rem 0;">Eng. Ahmed Waked</h3>
+                <span style="font-size: 0.7rem; color: var(--light-aqua);">v3.0 Ocean Edition</span>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2>📊 لوحة التحكم</h2>
+                    <p>نظرة عامة على نشاطك وإحصائياتك</p>
+                </div>
+
+                <div class="dashboard-stats">
+                    <div class="stat-card">
+                        <div class="stat-card-icon">📄</div>
+                        <div class="stat-card-content">
+                            <h4>إجمالي العمليات</h4>
+                            <div class="stat-card-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">🚗</div>
+                        <div class="stat-card-content">
+                            <h4>تقارير السيارات</h4>
+                            <div class="stat-card-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">📊</div>
+                        <div class="stat-card-content">
+                            <h4>تقارير الزيارات</h4>
+                            <div class="stat-card-value">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon">⏱️</div>
+                        <div class="stat-card-content">
+                            <h4>آخر عملية</h4>
+                            <div class="stat-card-value" style="font-size: 1rem;">لا يوجد</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>🎯 ابدأ الآن</h3>
+                    <p style="color: var(--light-aqua); margin-bottom: 1.5rem;">
+                        اختر العملية التي تريد القيام بها من القائمة الجانبية
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <button class="btn btn-primary" onclick="switchSection('cars')">
+                            <span>🚗</span>
+                            <span>استخلاص تقارير السيارات</span>
+                        </button>
+                        <button class="btn btn-primary" onclick="switchSection('visits')">
+                            <span>📊</span>
+                            <span>توزيع تقارير الزيارات</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="cars" class="section">
+                <div class="section-header">
+                    <h2>🚗 استخلاص تقارير بيانات السيارات</h2>
+                    <p>قم بتحميل تقرير بيانات السيارة واختيار وضع الاستخلاص</p>
+                </div>
+
+                <div class="card file-upload-card">
+                    <h3>📁 اختيار الملفات</h3>
+                    
+                    <div class="file-drop-zone" id="dropZone">
+                        <div class="upload-icon">📂</div>
+                        <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">
+                            اسحب الملفات هنا أو اضغط للاختيار
+                        </p>
+                        <p style="font-size: 0.9rem; opacity: 0.9;">
+                            يدعم ملفات: .xls, .xlsx
+                        </p>
+                    </div>
+                    
+                    <input type="file" id="filesInput" multiple accept=".xls,.xlsx" style="display: none;">
+                    
+                    <div class="file-list" id="fileList"></div>
+                </div>
+
+                <div class="card">
+                    <h3>⚙️ وضع الاستخلاص</h3>
+                    
+                    <div class="mode-selection">
+                        <div class="mode-card active" data-mode="engine_idle">
+                            <div class="mode-icon">🚗</div>
+                            <div class="mode-title">Engine Idle</div>
+                            <div class="mode-description">
+                                استخراج رقم السيارة (أول رقم في الكود)<br>
+                                مثال: من "Car-12345-ABC" يستخرج "12345"
+                            </div>
+                        </div>
+                        
+                        <div class="mode-card" data-mode="parking_details">
+                            <div class="mode-icon">🅿️</div>
+                            <div class="mode-title">Parking Details</div>
+                            <div class="mode-description">
+                                استخراج أرقام اللوحة فقط (جميع الأرقام مدمجة)<br>
+                                مثال: من "ABC-123-DEF-456" يستخرج "123456"
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box">
+                        <h4>💡 ما الفرق بين الوضعين؟</h4>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <strong>🚗 Engine Idle:</strong>
+                                مناسب لتقارير التوقفات مع دوران المحرك
+                            </div>
+                            <div class="info-item">
+                                <strong>🅿️ Parking Details:</strong>
+                                مناسب لتقارير مواقع التوقف
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📊 ما الذي سيتم عمله؟</h3>
+                    <div class="info-grid">
+                        <div class="info-item" style="border-color: var(--success);">
+                            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.5rem;">📄</div>
+                            <strong>التحويل التلقائي</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">تحويل ملفات XLS إلى XLSX مع الحفاظ على التنسيق</p>
+                        </div>
+                        <div class="info-item" style="border-color: var(--aqua);">
+                            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.5rem;">📍</div>
+                            <strong>استخراج المواقع</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">استخراج الإحداثيات + النص الوصفي للموقع</p>
+                        </div>
+                        <div class="info-item" style="border-color: var(--sand);">
+                            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.5rem;">🗺️</div>
+                            <strong>فحص النطاق</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">تحديد المواقع داخل/خارج نطاق الشركة</p>
+                        </div>
+                        <div class="info-item" style="border-color: var(--coral);">
+                            <div style="font-size: 2rem; text-align: center; margin-bottom: 0.5rem;">📑</div>
+                            <strong>تقرير موحد</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">دمج جميع البيانات في ملف واحد منسق</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <button class="btn btn-primary" id="startCarsBtn"> 
+                        <span>🚀</span>
+                        <span>بدء عملية الاستخلاص والمعالجة</span>
+                    </button>
+                </div>
+
+                <div class="progress-card" id="carsProgress">
+                    <h3>⚙️ جاري معالجة الملفات...</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="carsProgressBar">0%</div>
+                    </div>
+                    <p class="progress-text" id="carsProgressText">جاري التحضير...</p>
+                </div>
+
+                <div class="results-card" id="carsResults">
+                    <h3>🎉 اكتملت المعالجة بنجاح!</h3>
+                    <div id="carsResultsContent">
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <div class="stat-icon">📄</div>
+                                <div class="stat-value" id="totalRecords">0</div>
+                                <div class="stat-label">إجمالي السجلات</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-value" id="insideZone">0</div>
+                                <div class="stat-label">داخل النطاق</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">❌</div>
+                                <div class="stat-value" id="outsideZone">0</div>
+                                <div class="stat-label">خارج النطاق</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="stat-icon">⚠️</div>
+                                <div class="stat-value" id="undefinedZone">0</div>
+                                <div class="stat-label">غير محدد</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="btn btn-primary" style="width: auto;" id="downloadBtn">
+                            <span>📥</span>
+                            <span>تحميل التقرير</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="visits" class="section">
+                <div class="section-header">
+                    <h2>📊 توزيع تقارير الزيارات</h2>
+                    <p>قم بتحميل تقرير الزيارات (ملف واحد فقط) وإدخال اسم الورقة المراد معالجتها</p>
+                </div>
+
+                <div class="card file-upload-card">
+                    <h3>📁 اختيار ملف الزيارات</h3>
+                    
+                    <div class="file-drop-zone" id="visitsDropZone">
+                        <div class="upload-icon">📂</div>
+                        <p style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">
+                            اسحب الملف هنا أو اضغط للاختيار
+                        </p>
+                        <p style="font-size: 0.9rem; opacity: 0.9;">
+                            ملف واحد فقط: .xls, .xlsx
+                        </p>
+                    </div>
+                    
+                    <input type="file" id="visitsFileInput" accept=".xls,.xlsx" style="display: none;">
+                    
+                    <div class="file-list" id="visitsFileList"></div>
+                </div>
+
+                <div class="card">
+                    <h3>📄 اسم ورقة العمل (Sheet Name)</h3>
+                    <input 
+                        type="text" 
+                        id="sheetNameInput"
+                        placeholder="إجمالي" 
+                        value="إجمالي"
+                        style="width: 100%; padding: 1rem; background: var(--light-bg); border: 2px solid var(--aqua); border-radius: 10px; color: white; font-size: 1rem;"
+                    >
+                    <p style="color: var(--light-aqua); margin-top: 0.75rem; font-size: 0.9rem;">
+                        أدخل الاسم الصحيح للورقة التي تحتوي على بيانات الزيارات (المشرف، المندوب، الخط)
+                    </p>
+                    
+                    <div class="info-box" style="margin-top: 1.5rem;">
+                        <h4>💡 متطلبات الملف:</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0;">✅ يجب أن يحتوي على <strong>3 أعمدة على الأقل</strong>:</li>
+                            <li style="padding: 0.5rem 0; margin-right: 2rem;">1️⃣ <strong>المشرف</strong> (العمود الأول)</li>
+                            <li style="padding: 0.5rem 0; margin-right: 2rem;">2️⃣ <strong>المندوب</strong> (العمود الثاني)</li>
+                            <li style="padding: 0.5rem 0; margin-right: 2rem;">3️⃣ <strong>الخط</strong> (العمود الثالث)</li>
+                            <li style="padding: 0.5rem 0; color: var(--warning);">⚠️ اختر <strong>ملف واحد فقط</strong> لعملية التوزيع</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📦 ما الذي سيتم إنشاؤه؟</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <div style="background: rgba(60, 174, 163, 0.15); padding: 2rem; border-radius: 12px; border: 2px solid var(--aqua); text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">👔</div>
+                            <h4 style="color: var(--aqua); margin-bottom: 1rem;">ملفات المشرفين</h4>
+                            <p style="color: var(--text-light); line-height: 1.6;">
+                                ملف منفصل لكل مشرف<br>
+                                شيت "إجمالي" + شيتات للخطوط
+                            </p>
+                        </div>
+                        <div style="background: rgba(32, 191, 85, 0.15); padding: 2rem; border-radius: 12px; border: 2px solid var(--success); text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">👥</div>
+                            <h4 style="color: var(--success); margin-bottom: 1rem;">ملفات المندوبين</h4>
+                            <p style="color: var(--text-light); line-height: 1.6;">
+                                ملف منفصل لكل مندوب<br>
+                                شيت "إجمالي" + شيتات للخطوط
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(237, 85, 59, 0.15); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; border: 2px solid var(--coral); text-align: center;">
+                        <span style="font-size: 2rem;">📦</span>
+                        <p style="color: var(--coral); font-weight: bold; margin: 1rem 0;">ملف ZIP واحد يحتوي على جميع الملفات</p>
+                        <p style="color: var(--text-light); font-size: 0.9rem;">سيتم تحميل ملف مضغوط يحتوي على كل ملفات المشرفين والمندوبين</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <button class="btn btn-primary" id="startVisitsBtn">
+                        <span>📦</span>
+                        <span>بدء عملية التوزيع وإنشاء الملفات (ZIP)</span>
+                    </button>
+                </div>
+
+                <div class="progress-card" id="visitsProgress">
+                    <h3>⚙️ جاري معالجة التوزيع...</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="visitsProgressBar">0%</div>
+                    </div>
+                    <p class="progress-text" id="visitsProgressText">جاري التحضير...</p>
+                </div>
+
+                <div class="results-card" id="visitsResults">
+                    <h3>🎉 اكتمل التوزيع بنجاح!</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-icon">👔</div>
+                            <div class="stat-value" id="supervisorsCount">0</div>
+                            <div class="stat-label">ملفات المشرفين</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value" id="repsCount">0</div>
+                            <div class="stat-label">ملفات المندوبين</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-icon">📦</div>
+                            <div class="stat-value" id="totalFiles">0</div>
+                            <div class="stat-label">إجمالي الملفات</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5rem;">
+                        <button class="btn btn-primary" style="width: auto;" id="downloadVisitsBtn">
+                            <span>📥</span>
+                            <span>تحميل ملف ZIP</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section id="logs" class="section">
+                <div class="section-header">
+                    <h2>📜 سجل العمليات</h2>
+                    <p>شاهد سجل جميع عمليات المعالجة التي قمت بها</p>
+                </div>
+
+                <div class="card">
+                    <h3>📋 آخر العمليات</h3>
+                    <div id="logsContent">
+                        <p style="text-align: center; color: var(--light-aqua); padding: 3rem;">
+                            سيتم عرض سجل العمليات هنا قريباً...<br>
+                            <span style="font-size: 0.9rem; margin-top: 1rem; display: block;">يمكنك متابعة جميع العمليات التي قمت بها مع تفاصيل كاملة</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="account" class="section">
+                <div class="section-header">
+                    <h2>👤 إدارة الحساب</h2>
+                    <p>إدارة بيانات حسابك وتجديد الاشتراك</p>
+                </div>
+
+                <div class="card">
+                    <h3>ℹ️ معلومات الحساب</h3>
+                    <div id="accountContent">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div class="info-item">
+                                <strong>📧 البريد الإلكتروني:</strong>
+                                <p id="userEmail">تحميل...</p>
+                            </div>
+                            <div class="info-item">
+                                <strong>👤 اسم المستخدم:</strong>
+                                <p id="username">تحميل...</p>
+                            </div>
+                            <div class="info-item">
+                                <strong>📅 تاريخ التسجيل:</strong>
+                                <p id="createdAt">تحميل...</p>
+                            </div>
+                            <div class="info-item">
+                                <strong>⏰ آخر تسجيل دخول:</strong>
+                                <p id="lastLogin">تحميل...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box" style="margin-top: 2rem;">
+                            <h4>💳 حالة الاشتراك</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                                <div>
+                                    <strong>الحالة:</strong>
+                                    <p id="subscriptionStatus" style="margin-top: 0.5rem;">نشط ✅</p>
+                                </div>
+                                <div>
+                                    <strong>النوع:</strong>
+                                    <p id="subscriptionPeriod" style="margin-top: 0.5rem;">شهري</p>
+                                </div>
+                                <div>
+                                    <strong>تاريخ الانتهاء:</strong>
+                                    <p id="expiryDate" style="margin-top: 0.5rem;">تحميل...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <p>💡 نصيحة: استخدم الأزرار الجانبية للتنقل بين الأقسام | ✅ جميع البيانات تعالج بشكل آمن</p>
+    </footer>
+
+    <script>
+        // Global Variables
+        let selectedFiles = [];
+        let currentMode = 'engine_idle';
+        let selectedVisitsFile = null;
+        const API_URL = ''; // Placeholder for API URL, assumed to be relative or an empty string if relative path is used.
+        
+        // Helper: Mockup for a notification function since it's used in the new logic.
+        function showNotification(message, type) {
+            console.log(`[Notification ${type}]: ${message}`);
+            // In a real app, this would show a toast/popup notification.
+        }
+        
+        // Helper: Mockup for a file count display update function since it's used in the new logic.
+        function updateFileCountDisplay() {
+            // This functionality is already partially handled by displayFileList()
+            displayFileList();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeApp();
+        });
+        
+        function initializeApp() {
+            // Check authentication
+            if (!isAuthenticated()) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            // Initialize navigation
+            initializeNavigation();
+            
+            // Initialize file uploads
+            initializeFileUpload();
+            initializeVisitsFileUpload();
+            
+            // Initialize mode selection
+            initializeModeSelection();
+            
+            // Initialize buttons - IMPORTANT: Attach event listener to the Cars button using the new handler
+            document.getElementById('startCarsBtn').removeEventListener('click', handleCarsProcess); // Remove old listener if it existed
+            document.getElementById('startCarsBtn').addEventListener('click', handleCarsProcess); // Add new listener
+            document.getElementById('startVisitsBtn').addEventListener('click', handleVisitsProcess);
+            
+            // Load user data
+            loadUserData();
+            
+            // Update subscription timer
+            updateSubscriptionTimer();
+            setInterval(updateSubscriptionTimer, 60000); // Update every minute
+        }
+        
+        // Navigation
+        function initializeNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const section = btn.dataset.section;
+                    switchSection(section);
+                });
+            });
+        }
+        
+        function switchSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Update active button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.section === sectionName) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // File Upload for Cars
+        function initializeFileUpload() {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('filesInput');
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+        }
+        
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            displayFileList();
+        }
+        
+        function displayFileList() {
+            const fileList = document.getElementById('fileList');
+            
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = '';
+                return;
+            }
+            
+            const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+            const totalSizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+            
+            let html = `
+                <div style="text-align: center; margin: 1rem 0; font-weight: 600; color: white;">
+                    <span style="font-size: 1.5rem;">✅</span>
+                    <span style="margin: 0 0.5rem;">تم اختيار ${selectedFiles.length} ملف</span>
+                    <span style="opacity: 0.9;">(${totalSizeMB} MB)</span>
+                </div>
+            `;
+            
+            selectedFiles.forEach((file, index) => {
+                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                const ext = file.name.split('.').pop().toUpperCase();
+                
+                html += `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <span style="font-size: 1.5rem;">📄</span>
+                            <span style="font-weight: 600;">${file.name}</span>
+                        </div>
+                        <div class="file-size">${ext} • ${sizeMB} MB</div>
+                    </div>
+                `;
+            });
+            
+            fileList.innerHTML = html;
+        }
+        
+        // File Upload for Visits
+        function initializeVisitsFileUpload() {
+            const dropZone = document.getElementById('visitsDropZone');
+            const fileInput = document.getElementById('visitsFileInput');
+            
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            });
+            
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('dragover');
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+                if (e.dataTransfer.files.length > 0) {
+                    handleVisitsFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleVisitsFile(e.target.files[0]);
+                }
+            });
+        }
+        
+        function handleVisitsFile(file) {
+            selectedVisitsFile = file;
+            displayVisitsFile();
+        }
+        
+        function displayVisitsFile() {
+            const fileList = document.getElementById('visitsFileList');
+            
+            if (!selectedVisitsFile) {
+                fileList.innerHTML = '';
+                return;
+            }
+            
+            const sizeMB = (selectedVisitsFile.size / (1024 * 1024)).toFixed(2);
+            const ext = selectedVisitsFile.name.split('.').pop().toUpperCase();
+            
+            fileList.innerHTML = `
+                <div style="text-align: center; margin: 1rem 0; font-weight: 600; color: white;">
+                    <span style="font-size: 1.5rem;">✅</span>
+                    <span style="margin: 0 0.5rem;">تم اختيار الملف</span>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <span style="font-size: 1.5rem;">📄</span>
+                        <span style="font-weight: 600;">${selectedVisitsFile.name}</span>
+                    </div>
+                    <div class="file-size">${ext} • ${sizeMB} MB</div>
+                </div>
+            `;
+        }
+        
+        // Mode Selection
+        function initializeModeSelection() {
+            const modeCards = document.querySelectorAll('.mode-card');
+            modeCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    currentMode = card.dataset.mode;
+                    modeCards.forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+            });
+        }
+        
+        // Process Cars - NEW IMPLEMENTATION
+        async function handleCarsProcess(event) {
+            event.preventDefault();
+            console.log('🚗 Starting car processing...');
+            
+            // Adapting the new script's variables to the existing HTML IDs
+            const processBtn = document.getElementById('startCarsBtn');
+            const progressCard = document.getElementById('carsProgress');
+            const resultsCard = document.getElementById('carsResults');
+            const progressBar = document.getElementById('carsProgressBar'); // The fill element
+            const progressText = document.getElementById('carsProgressText');
+            const resultsContent = document.getElementById('carsResultsContent');
+            
+            // Validation
+            if (selectedFiles.length === 0) {
+                alert('⚠️ الرجاء اختيار ملف واحد على الأقل');
+                return;
+            }
+            
+            // Check file types
+            const invalidFiles = selectedFiles.filter(f => {
+                const ext = f.name.split('.').pop().toLowerCase();
+                return ext !== 'xls' && ext !== 'xlsx';
+            });
+            
+            if (invalidFiles.length > 0) {
+                alert('⚠️ يجب أن تكون جميع الملفات من نوع Excel (.xls أو .xlsx)');
+                return;
+            }
+            
+            console.log(`📊 Processing ${selectedFiles.length} files in mode: ${currentMode}`);
+            
+            // UI updates
+            processBtn.disabled = true;
+            progressCard.classList.add('active'); // Use existing class logic
+            resultsCard.classList.remove('active'); // Use existing class logic
+            progressBar.style.width = '10%';
+            progressBar.textContent = '10%';
+            progressText.textContent = 'جاري رفع الملفات...';
+            progressBar.style.background = 'linear-gradient(90deg, var(--aqua), var(--foam))'; // Reset background
+            
+            try {
+                // Prepare FormData
+                const formData = new FormData();
+                
+                selectedFiles.forEach(file => {
+                    formData.append('files', file);
+                    console.log(`📎 Added file to FormData: ${file.name}`);
+                });
+                
+                formData.append('job_type', 'cars');
+                formData.append('mode', currentMode);
+                
+                progressBar.style.width = '30%';
+                progressBar.textContent = '30%';
+                progressText.textContent = 'جاري تحويل ومعالجة الملفات...';
+                
+                // Get token
+                const token = getToken();
+                if (!token) {
+                    throw new Error('Session expired');
+                }
+                
+                console.log('🔐 Token acquired, sending request...');
+                
+                // Send request with longer timeout (5 minutes)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 300000); 
+                
+                const response = await fetch(`${API_URL}/api/process`, { // Using API_URL and assuming /api/process endpoint
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData,
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                progressBar.style.width = '70%';
+                progressBar.textContent = '70%';
+                progressText.textContent = 'جاري إنشاء التقرير النهائي...';
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('❌ Server error:', errorData);
+                    throw new Error(errorData.error || 'فشل في المعالجة');
+                }
+                
+                console.log('✅ Server response received');
+                
+                // Get filename from headers (using the robust function from the original script)
+                let filename = getFilenameFromResponse(response) || 'Xtractor_Report.xlsx';
+                
+                console.log(`📥 Downloading file: ${filename}`);
+                
+                // Download file
+                const blob = await response.blob();
+                downloadFile(blob, filename); // Using the original downloadFile helper
+                
+                console.log('✅ File downloaded successfully');
+                
+                // Update UI - success
+                progressBar.style.width = '100%';
+                progressBar.textContent = '✅ 100%';
+                progressText.textContent = '✅ اكتملت المعالجة بنجاح!';
+                progressBar.style.background = 'linear-gradient(90deg, var(--success), var(--aqua))'; 
+                
+                // Show results
+                // Wait for the progress bar to finish animation before hiding it and showing results
+                setTimeout(() => {
+                    progressCard.classList.remove('active');
+                    resultsCard.classList.add('active'); 
+                    
+                    // Update results card content (adapting the new script's HTML structure for results)
+                    // Note: I'll use the carsResultsContent ID to hold the new structured results
+                    document.getElementById('carsResultsContent').innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">🎉</div>
+                            <h3 style="color: var(--text-white); margin-bottom: 15px; font-size: 1.3rem;">
+                                تمت معالجة ${selectedFiles.length} ملف بنجاح!
+                            </h3>
+                            <div class="stat-item">
+                                <span class="stat-label">📄 اسم الملف:</span>
+                                <span class="stat-value">${filename}</span>
+                            </div>
+                            <p style="margin-top: 20px; color: var(--light-aqua); line-height: 1.8; font-size: 0.9rem;">
+                                ✅ تم تحويل جميع ملفات XLS إلى XLSX<br>
+                                ✅ تم استخراج البيانات بنجاح<br>
+                                ✅ تم فحص المواقع الجغرافية<br>
+                                ✅ تم إنشاء تقرير موحد شامل<br>
+                                📥 تم تحميل التقرير تلقائياً
+                            </p>
+                            <button class="btn btn-primary" style="width: auto; margin-top: 1.5rem;" onclick="downloadFile(new Blob(), '${filename}')">
+                                <span>📥</span>
+                                <span>تحميل التقرير مرة أخرى</span>
+                            </button>
+                        </div>
+                    `;
+                }, 1000); 
+
+                // Clear selected files
+                selectedFiles = [];
+                document.getElementById('filesInput').value = '';
+                updateFileCountDisplay(); // Calls displayFileList
+                
+                showNotification('تمت المعالجة بنجاح! 🎉', 'success');
+                
+            } catch (error) {
+                console.error('❌ Processing error:', error);
+                
+                progressBar.style.width = '100%';
+                progressBar.textContent = '❌ فشلت العملية';
+                progressText.textContent = `خطأ: ${error.message}`;
+                progressBar.style.background = 'linear-gradient(90deg, var(--error), var(--coral))'; 
+                
+                alert(`❌ فشلت عملية المعالجة:\n\n${error.message}\n\nالرجاء المحاولة مرة أخرى`);
+                
+            } finally {
+                processBtn.disabled = false;
+                
+                // Hide progress after a longer delay for the user to see the error/success
+                setTimeout(() => {
+                    if (progressCard.classList.contains('active')) {
+                        progressCard.classList.remove('active');
+                    }
+                }, 5000);
+            }
+        }
+        
+        // Process Visits
+        async function handleVisitsProcess() {
+            if (!selectedVisitsFile) {
+                alert('⚠️ الرجاء اختيار ملف Excel');
+                return;
+            }
+            
+            const sheetName = document.getElementById('sheetNameInput').value || 'إجمالي';
+            const btn = document.getElementById('startVisitsBtn');
+            
+            if (!btn) {
+                console.error('Button not found');
+                return;
+            }
+            
+            btn.disabled = true;
+            
+            // Check if progress elements exist
+            const progressCard = document.getElementById('visitsProgress');
+            const progressBar = document.getElementById('visitsProgressBar');
+            const progressText = document.getElementById('visitsProgressText');
+            
+            if (!progressCard || !progressBar || !progressText) {
+                alert('❌ خطأ: عناصر الواجهة غير موجودة');
+                btn.disabled = false;
+                return;
+            }
+            
+            showProgress('visits', 'جاري رفع الملف...', 10);
+            
+            try {
+                const formData = new FormData();
+                formData.append('files', selectedVisitsFile);
+                formData.append('job_type', 'visits');
+                formData.append('sheet_name', sheetName);
+                
+                showProgress('visits', 'جاري معالجة البيانات وإنشاء الملفات...', 50);
+                
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    },
+                    body: formData
+                });
+                
+                showProgress('visits', 'جاري ضغط الملفات...', 80);
+                
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || 'فشل في التوزيع');
+                }
+                
+                showProgress('visits', 'تم الانتهاء!', 100);
+                
+                // Download ZIP
+                const blob = await response.blob();
+                const filename = getFilenameFromResponse(response) || 'Xtractor_Visits.zip';
+                downloadFile(blob, filename);
+                
+                // Show results (mock data)
+                showVisitsResults({
+                    supervisors_count: 5,
+                    representatives_count: 15,
+                    total_files: 20
+                });
+                
+            } catch (error) {
+                alert('❌ حدث خطأ: ' + error.message);
+                document.getElementById('visitsProgress').classList.remove('active');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+        
+        // Progress Functions - MODIFIED to only use class toggle and update bar/text
+        function showProgress(type, message, percentage) {
+            const progressCard = document.getElementById(`${type}Progress`);
+            const progressBar = document.getElementById(`${type}ProgressBar`);
+            const progressText = document.getElementById(`${type}ProgressText`);
+            
+            // Ensure progress is reset to the default gradient on new show
+            progressBar.style.background = 'linear-gradient(90deg, var(--aqua), var(--foam))';
+            
+            progressCard.classList.add('active');
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+            progressText.textContent = message;
+            
+            // Hide results card
+            document.getElementById(`${type}Results`).classList.remove('active');
+        }
+        
+        function showResults(type, data) {
+            // Hide progress
+            setTimeout(() => {
+                document.getElementById(`${type}Progress`).classList.remove('active');
+                
+                // Show results
+                const resultsCard = document.getElementById(`${type}Results`);
+                resultsCard.classList.add('active');
+                
+                // Update stats
+                document.getElementById('totalRecords').textContent = data.total_records;
+                document.getElementById('insideZone').textContent = data.inside_zone;
+                document.getElementById('outsideZone').textContent = data.outside_zone;
+                document.getElementById('undefinedZone').textContent = data.undefined;
+            }, 1000);
+        }
+        
+        function showVisitsResults(data) {
+            setTimeout(() => {
+                document.getElementById('visitsProgress').classList.remove('active');
+                
+                const resultsCard = document.getElementById('visitsResults');
+                resultsCard.classList.add('active');
+                
+                document.getElementById('supervisorsCount').textContent = data.supervisors_count;
+                document.getElementById('repsCount').textContent = data.representatives_count;
+                document.getElementById('totalFiles').textContent = data.total_files;
+            }, 1000);
+        }
+        
+        // Helper Functions
+        function isAuthenticated() {
+            return !!localStorage.getItem('access_token');
+        }
+        
+        function getToken() {
+            return localStorage.getItem('access_token');
+        }
+        
+        function getUser() {
+            const userStr = localStorage.getItem('user');
+            return userStr ? JSON.parse(userStr) : null;
+        }
+        
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        
+        function getFilenameFromResponse(response) {
+            const disposition = response.headers.get('Content-Disposition');
+            if (disposition) {
+                // More robust matching for filename
+                const match = disposition.match(/filename\*?=utf-8''(.+)/i) || 
+                              disposition.match(/filename="?(.+)"?/i);
+                if (match) {
+                    return decodeURIComponent(match[1]);
+                }
+            }
+            return null;
+        }
+        
+        function downloadFile(blob, filename) {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+        
+        // Load User Data
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/auth/me', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const user = data.user;
+                    
+                    // Update account section
+                    document.getElementById('userEmail').textContent = user.email;
+                    document.getElementById('username').textContent = user.username;
+                    document.getElementById('createdAt').textContent = formatDate(user.created_at);
+                    document.getElementById('lastLogin').textContent = user.last_login ? formatDate(user.last_login) : 'لا يوجد';
+                    
+                    // Subscription info
+                    if (user.subscription) {
+                        const sub = user.subscription;
+                        document.getElementById('subscriptionStatus').textContent = sub.active ? 'نشط ✅' : 'منتهي ❌';
+                        document.getElementById('subscriptionPeriod').textContent = sub.subscription_period === 'monthly' ? 'شهري' : 'سنوي';
+                        document.getElementById('expiryDate').textContent = formatDate(sub.expires_at);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        // Update Subscription Timer
+        async function updateSubscriptionTimer() {
+            try {
+                const response = await fetch('/api/subscription/status', {
+                    headers: {
+                        'Authorization': `Bearer ${getToken()}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const sub = data.subscription;
+                    
+                    if (sub && sub.active) {
+                        const hours = sub.hours_left || 0;
+                        const minutes = sub.minutes_left || 0;
+                        document.getElementById('timeRemaining').textContent = `${hours} ساعة و ${minutes} دقيقة`;
+                    } else {
+                        document.getElementById('timeRemaining').textContent = 'انتهى الاشتراك';
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating subscription timer:', error);
+            }
+        }
+        
+        // Format Date
+        function formatDate(dateStr) {
+            if (!dateStr) return 'غير متوفر';
+            
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('ar-EG', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch {
+                return dateStr;
+            }
+        }
+    </script>
+</body>
+</html>

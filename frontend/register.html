@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌊 إنشاء حساب - Xtractor Pro</title>
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card register-card">
+            <!-- Logo Section -->
+            <div class="logo-section">
+                <div class="logo-icon">🌊</div>
+                <h1>Xtractor Pro</h1>
+                <p>انضم إلينا واستمتع بأفضل الخدمات</p>
+            </div>
+
+            <!-- Form Section -->
+            <div class="form-section">
+                <h2>إنشاء حساب جديد</h2>
+                
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="fullName">👤 الاسم الكامل</label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            required 
+                            placeholder="أحمد محمد"
+                            autocomplete="name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">🏷️ اسم المستخدم</label>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            required 
+                            placeholder="ahmed123"
+                            autocomplete="username"
+                        >
+                        <small>يجب أن يكون فريداً</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">📧 البريد الإلكتروني</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            required 
+                            placeholder="example@email.com"
+                            autocomplete="email"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">🔒 كلمة المرور</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            required 
+                            placeholder="••••••••"
+                            autocomplete="new-password"
+                            minlength="6"
+                        >
+                        <small>يجب أن تكون 6 أحرف على الأقل</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">🔒 تأكيد كلمة المرور</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            required 
+                            placeholder="••••••••"
+                            autocomplete="new-password"
+                        >
+                    </div>
+
+                    <!-- Subscription Period Selection -->
+                    <div class="form-group">
+                        <label>📅 اختر مدة الاشتراك</label>
+                        <div class="subscription-options">
+                            <label class="subscription-option">
+                                <input type="radio" name="subscription_period" value="monthly" checked>
+                                <div class="option-content">
+                                    <span class="option-icon">📆</span>
+                                    <span class="option-title">شهر واحد</span>
+                                    <span class="option-desc">30 يوم</span>
+                                </div>
+                            </label>
+                            <label class="subscription-option">
+                                <input type="radio" name="subscription_period" value="yearly">
+                                <div class="option-content">
+                                    <span class="option-icon">🗓️</span>
+                                    <span class="option-title">سنة كاملة</span>
+                                    <span class="option-desc">365 يوم</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="terms" required>
+                            <span>أوافق على <a href="#" class="link">الشروط والأحكام</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="registerBtn">
+                        <span>إنشاء الحساب</span>
+                        <div class="spinner" style="display: none;"></div>
+                    </button>
+
+                    <div class="divider">
+                        <span>أو</span>
+                    </div>
+
+                    <div class="register-link">
+                        <p>لديك حساب بالفعل؟ <a href="/login">سجل الدخول</a></p>
+                    </div>
+                </form>
+
+                <!-- Alert Messages -->
+                <div id="alertMessage" class="alert" style="display: none;"></div>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <h3>📧 ملاحظة هامة</h3>
+                <p style="line-height: 1.8;">
+                    <strong>⚠️ بعد التسجيل:</strong><br>
+                    سيتم إرسال <strong>كود التفعيل</strong> إلى المطور مباشرة.<br>
+                    يرجى <strong>التواصل مع المطور</strong> للحصول على الكود.<br><br>
+                    
+                    📞 <strong>للتواصل:</strong><br>
+                    📧 eng.ahmed.a.waked@gmail.com
+                </p>
+            </div>
+
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p>Developed by Eng. Ahmed Waked</p>
+                <p>v3.0 Ocean Edition</p>
+            </div>
+        </div>
+
+        <!-- Background Animation -->
+        <div class="ocean-animation">
+            <div class="wave wave1"></div>
+            <div class="wave wave2"></div>
+            <div class="wave wave3"></div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const registerForm = document.getElementById('registerForm');
+            const registerBtn = document.getElementById('registerBtn');
+            const alertMessage = document.getElementById('alertMessage');
+
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const fullName = document.getElementById('fullName').value.trim();
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const subscriptionPeriod = document.querySelector('input[name="subscription_period"]:checked').value;
+
+                // Validation
+                if (password !== confirmPassword) {
+                    showAlert('error', '❌ كلمات المرور غير متطابقة');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    showAlert('error', '❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                    return;
+                }
+
+                // Show loading
+                registerBtn.disabled = true;
+                registerBtn.querySelector('.spinner').style.display = 'inline-block';
+
+                try {
+                    const response = await fetch('/api/auth/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            username: username,
+                            password: password,
+                            full_name: fullName,
+                            subscription_period: subscriptionPeriod
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success || response.status === 201) {
+                        showAlert('success', '✅ تم التسجيل بنجاح! سيتم إرسال كود التفعيل للمطور. جاري التحويل...');
+                        
+                        // Save user ID for activation
+                        if (result.user && result.user.id) {
+                            localStorage.setItem('pending_user_id', result.user.id);
+                        }
+                        
+                        // Redirect to activation page after delay
+                        setTimeout(() => {
+                            window.location.href = '/activate';
+                        }, 2000);
+                    } else {
+                        showAlert('error', '❌ ' + (result.error || 'فشل إنشاء الحساب'));
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    showAlert('error', '❌ حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى');
+                } finally {
+                    registerBtn.disabled = false;
+                    registerBtn.querySelector('.spinner').style.display = 'none';
+                }
+            });
+
+            function showAlert(type, message) {
+                alertMessage.className = `alert alert-${type}`;
+                alertMessage.textContent = message;
+                alertMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    alertMessage.style.display = 'none';
+                }, 8000);
+            }
+        });
+    </script>
+</body>
+</html>
