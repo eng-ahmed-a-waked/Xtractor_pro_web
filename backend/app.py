@@ -42,6 +42,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 
 # ========== Production Logging Setup ========== #
+env = os.environ.get('FLASK_ENV', 'development')
 if env == 'production':
     import logging
     logging.basicConfig(
