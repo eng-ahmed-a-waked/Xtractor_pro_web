@@ -41,6 +41,20 @@ logger = logging.getLogger(__name__)
 # Initialize Flask app
 app = Flask(__name__, static_folder='../frontend', static_url_path='')
 
+# ========== Production Logging Setup ========== #
+if env == 'production':
+    import logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    )
+    logger.info("="*50)
+    logger.info("XTRACTOR PRO - STARTING IN PRODUCTION MODE")
+    logger.info(f"Port: {os.environ.get('PORT', 8080)}")
+    logger.info(f"Database: {app.config['SQLALCHEMY_DATABASE_URI']}")
+    logger.info(f"Upload folder: {app.config['UPLOAD_FOLDER']}")
+    logger.info("="*50)
+
 # ========== إصلاح فوري لقاعدة البيانات ========== #
 # إنشاء مجلد data في نفس المجلد
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
